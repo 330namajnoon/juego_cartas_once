@@ -2,7 +2,7 @@
   "name": "juego_cartas_once",
   "version": "1.0.0",
   "description": "",
-  "main": "public/js/linrerias.js",
+  "main": "public/js/librerias.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
