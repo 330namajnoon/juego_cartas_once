@@ -55,6 +55,9 @@ let misGanancias = CrearObjeto("cartas", []);
 let tu = CrearObjeto("cartas", cartasDePersonas[1]);
 let mesa = CrearObjeto("cartas", cartasDePersonas[2]);
 
+yo.cartas = [{numero:2},{numero:8},{numero:6},{numero:4}];
+mesa.cartas = [{numero:9},{numero:3},{numero:5},{numero:7}];
+
 console.log(yo)
 console.log(mesa);
 console.log(misGanancias);
@@ -65,22 +68,25 @@ console.log(misGanancias);
 function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGanancias = {}) {
     let test = false;
     for (let index1 = 0; index1 < cartasDeMesa.cartas.length; index1++) {
-        let faltaNumero1 = 11 - (misCartas.cartas[cartaJugada].numero + cartasDeMesa.cartas[index1].numero);
+       
         if (misCartas.cartas[cartaJugada].numero < 11 &&
             cartasDeMesa.cartas[index1].numero < 11 &&
-            misCartas.cartas[cartaJugada].numero + cartasDeMesa.cartas[index1].numero == 11) {
+            misCartas.cartas[cartaJugada].numero + cartasDeMesa.cartas[index1].numero == 11)
+        {
             misGanancias.cartas.push(misCartas.cartas[cartaJugada]);
             misGanancias.cartas.push(cartasDeMesa.cartas[index1]);
             misCartas.cartas.splice(cartaJugada, 1);
             cartasDeMesa.cartas.splice(index1, 1);
+            test = true;
         } else {
             for (let index2 = 0; index2 < cartasDeMesa.cartas.length; index2++) {
-                let faltaNumero2 = 11 - (misCartas.cartas[cartaJugada].numero + cartasDeMesa.cartas[index1].numero + cartasDeMesa.cartas[index2].numero);
+                console.log(misCartas.cartas[cartaJugada]);
                 if (misCartas.cartas[cartaJugada].numero < 11 &&
                     cartasDeMesa.cartas[index1].numero < 11 &&
                     cartasDeMesa.cartas[index2].numero < 11 &&
                     misCartas.cartas[cartaJugada].numero + cartasDeMesa.cartas[index1].numero + cartasDeMesa.cartas[index2].numero == 11 &&
-                    index2 !== index1) {
+                    index2 !== index1) 
+                {
                     misGanancias.cartas.push(misCartas.cartas[cartaJugada]);
                     misGanancias.cartas.push(cartasDeMesa.cartas[index1]);
                     misGanancias.cartas.push(cartasDeMesa.cartas[index2]);
@@ -89,60 +95,16 @@ function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGan
                     cartasDeMesa.cartas.splice(index2, 1);
                     test = true;
                 } else {
-                    for (let index3 = 0; index3 < cartasDeMesa.cartas.length; index3++) {
-
-                        if (misCartas.cartas[cartaJugada].numero < 11 &&
-                            cartasDeMesa.cartas[index1].numero < 11 &&
-                            cartasDeMesa.cartas[index2].numero < 11 &&
-                            cartasDeMesa.cartas[index3].numero < 11 &&
-                            misCartas.cartas[cartaJugada].numero + cartasDeMesa.cartas[index1].numero + cartasDeMesa.cartas[index2].numero + cartasDeMesa.cartas[index3].numero == 11 &&
-                            index2 !== index1 && index3 !== index2 && index3 !== index1) {
-                            misGanancias.cartas.push(misCartas.cartas[cartaJugada]);
-                            misGanancias.cartas.push(cartasDeMesa.cartas[index1]);
-                            misGanancias.cartas.push(cartasDeMesa.cartas[index2]);
-                            misGanancias.cartas.push(cartasDeMesa.cartas[index3]);
-                            misCartas.cartas.splice(cartaJugada, 1);
-                            cartasDeMesa.cartas.splice(index1, 1);
-                            cartasDeMesa.cartas.splice(index2, 1);
-                            cartasDeMesa.cartas.splice(index3, 1);
-                            test = true;
-                        } else {
-                            for (let index4 = 0; index4 < cartasDeMesa.cartas.length; index4++) {
-
-                                if (misCartas.cartas[cartaJugada].numero < 11 &&
-                                    cartasDeMesa.cartas[index1].numero < 11 &&
-                                    cartasDeMesa.cartas[index2].numero < 11 &&
-                                    cartasDeMesa.cartas[index3].numero < 11 &&
-                                    cartasDeMesa.cartas[index4].numero < 11 &&
-                                    misCartas.cartas[cartaJugada].numero + cartasDeMesa.cartas[index1].numero + cartasDeMesa.cartas[index2].numero + cartasDeMesa.cartas[index3].numero + cartasDeMesa.cartas[index4].numero == 11 &&
-                                    index2 !== index1 && index3 !== index2 && index3 !== index1 && index4 !== index3 && index4 !== index2 && index4 !== index1) 
-                                {
-                                    misGanancias.cartas.push(misCartas.cartas[cartaJugada]);
-                                    misGanancias.cartas.push(cartasDeMesa.cartas[index1]);
-                                    misGanancias.cartas.push(cartasDeMesa.cartas[index2]);
-                                    misGanancias.cartas.push(cartasDeMesa.cartas[index3]);
-                                    misGanancias.cartas.push(cartasDeMesa.cartas[index4]);
-                                    misCartas.cartas.splice(cartaJugada, 1);
-                                    cartasDeMesa.cartas.splice(index1, 1);
-                                    cartasDeMesa.cartas.splice(index2, 1);
-                                    cartasDeMesa.cartas.splice(index3, 1);
-                                    cartasDeMesa.cartas.splice(index4, 1);
-                                    test = true;
-                                }
-
-                            }
-                        }
-
+                    if(test == false) {
+                        cartasDeMesa.cartas.push(misCartas.cartas[cartaJugada]);
+                        misCartas.cartas.splice(cartaJugada,1)
                     }
                 }
 
             }
         }
     }
-    if(test == false) {
-        cartasDeMesa.cartas.push(misCartas.cartas[cartaJugada]);
-        misCartas.cartas.splice(cartaJugada,1)
-    }
+   
 }
 
 let yo_m2 = ""
@@ -156,9 +118,9 @@ mesa.cartas.forEach(e => {
 })
 console.log(mesa_m2);
 
-console.log(ContarCartas(prompt(), yo, mesa, misGanancias));
+console.log(ContarCartas(Number(prompt()), yo, mesa, misGanancias));
 let g_m2 = ""
-yo.cartas.forEach(e => {
+misGanancias.cartas.forEach(e => {
     g_m2 += e.numero+"--";
 })
 console.log(g_m2);
