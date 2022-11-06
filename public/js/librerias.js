@@ -44,7 +44,7 @@ function reparterCartas(caja, cartas = [4, 4, 4]) {
     })
     return cartasDeJuego;
 }
-let cartasDePersonas = new reparterCartas(caja, [4, 4, 4]);
+let cartasDePersonas = reparterCartas(caja, [4, 4, 4]);
 console.log(cartasDePersonas);
 console.log(caja);
 
@@ -55,8 +55,8 @@ let misGanancias = CrearObjeto("cartas", []);
 let tu = CrearObjeto("cartas", cartasDePersonas[1]);
 let mesa = CrearObjeto("cartas", cartasDePersonas[2]);
 
-yo.cartas = [{ numero: 11 }, { numero: 1 }, { numero: 6 }, { numero: 3 }];
-mesa.cartas = [{ numero: 2 }, { numero: 1 }, { numero: 1 }, { numero: 1 }];
+// yo.cartas = [{ numero: 11 }, { numero: 1 }, { numero: 6 }, { numero: 3 }];
+// mesa.cartas = [{ numero: 2 }, { numero: 1 }, { numero: 1 }, { numero: 1 }];
 
 console.log(yo)
 console.log(mesa);
@@ -66,6 +66,7 @@ console.log(misGanancias);
 
 
 function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGanancias = {}) {
+    let cartNo = misCartas.cartas[cartaJugada].numero;
     let test = false;
     if(misCartas.cartas[cartaJugada].numero < 11) {
         for (let index1 = 0; index1 < cartasDeMesa.cartas.length; index1++) {
@@ -162,7 +163,7 @@ function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGan
         }
     }
 
-    if (misCartas.cartas[cartaJugada].numero == 11) {
+    if (cartNo == 11) {
         for (let index1 = 0; index1 < cartasDeMesa.cartas.length; index1++) {
             if(cartasDeMesa.cartas[index1].numero < 11) {
                 misGanancias.cartas.push(cartasDeMesa.cartas[index1]);
@@ -174,10 +175,27 @@ function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGan
         misCartas.cartas.splice(cartaJugada,1,"");
 
     }
+
+    if(cartNo == 12 || cartNo == 13) {
+        for (let index = 0; index <  cartasDeMesa.cartas.length; index++) {
+            if (cartasDeMesa.cartas[index].numero == cartNo) {
+                misGanancias.cartas.push(cartasDeMesa.cartas[index]);
+                cartasDeMesa.cartas.splice(index,1,"");
+                misGanancias.cartas.push(misCartas.cartas[cartaJugada]);
+                misCartas.cartas.splice(cartaJugada,1,"");
+            }
+            
+        }
+       
+    }
+
+
     if (test == false) {
         cartasDeMesa.cartas.push(misCartas.cartas[cartaJugada]);
         misCartas.cartas.splice(cartaJugada, 1)
     }
+
+   
 
     
     let cartas_ = [];
@@ -188,30 +206,46 @@ function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGan
 
 }
 
-let yo_m2 = ""
+let test = false;
+
+while(caja.cartas.length > 0) {
+
+let yo_m2 = "yo:"
 yo.cartas.forEach(e => {
     yo_m2 += e.numero + "--";
 })
 console.log(yo_m2);
-let mesa_m2 = ""
+let mesa_m2 = "mesa: "
 mesa.cartas.forEach(e => {
     mesa_m2 += e.numero + "--";
 })
 console.log(mesa_m2);
 
 console.log(ContarCartas(Number(prompt()), yo, mesa, misGanancias));
-let g_m2 = ""
+let g_m2 = "g: "
 misGanancias.cartas.forEach(e => {
     g_m2 += e.numero + "--";
 })
 console.log(g_m2);
-yo_m2 = ""
+yo_m2 = "yo: "
 yo.cartas.forEach(e => {
     yo_m2 += e.numero + "--";
 })
 console.log(yo_m2);
-mesa_m2 = ""
+mesa_m2 = "mesa: "
 mesa.cartas.forEach(e => {
     mesa_m2 += e.numero + "--";
 })
 console.log(mesa_m2);
+
+if (yo.cartas.length == 0) {
+
+    cartasDePersonas = reparterCartas(caja, [4, 4]);
+    yo = CrearObjeto("cartas", cartasDePersonas[0]);
+}
+if (caja.cartas.length <= 0 && yo.cartas.length <= 0) {
+    test = true;
+    alert("final")
+}
+
+}
