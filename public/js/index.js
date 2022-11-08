@@ -1,15 +1,38 @@
 import { CrateElement } from "./abzarha.js";
+function CrateId(users = []) {
+    let palabras = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM123456789";
+    let test = true;
+    let userId;
+    while (test == true) {
+        let id = "";
+        for (let index = 0; index < 15; index++) {
+            id += palabras.charAt(Math.floor(Math.random() * palabras.length));
+        }
+        let test_ = 0;
+        users.forEach(e => {
+            if (e.id == id) test_++;
+        })
+        if (test_ == 0) {
+            test = false;
+            userId = id;
+        }
+    }
+    return userId;
+}
 
 const socket = io();
 
 let rabetekarbari;
+let link = CrateElement({name:"a",atriviuts:[{name:"href",value:"./users.html"}]});
+document.querySelector("body").appendChild(link);
+
 
 function RabeteKarbari() {
     this.body = document.querySelector("body");
     this.paszamine = CrateElement({name:"div",class:"paszamine"});
     this.imgDiv = CrateElement({name:"div",class:"imgDiv"});
     this.file = CrateElement({name:"input",type:"file"});
-    this.img = CrateElement({name:"img"})
+    this.img = CrateElement({name:"img",src:"../images/addimage.png"})
 
     this.nameDiv = CrateElement({name:"div",class:"nameDiv"});
     this.nameInput = CrateElement({name:"input",atriviuts:[{name:"placeholder",value:"Nombre"}]});
@@ -21,14 +44,17 @@ function RabeteKarbari() {
     this.imgDiv.addEventListener("click",()=> {
         this.file.click();
     })
-    this.img.addEventListener("change",()=> {
+    this.file.addEventListener("change",()=> {
         this.uploadImage();
+    })
+    this.button.addEventListener("click",()=> {
+        this.saveData();
     })
 }
 RabeteKarbari.prototype.Crate = function() {
+    this.imgDiv.appendChild(this.file);
+    this.imgDiv.appendChild(this.img);
     this.paszamine.appendChild(this.imgDiv);
-    this.paszamine.appendChild(this.file);
-    this.paszamine.appendChild(this.img);
     this.nameDiv.appendChild(this.nameInput);
     this.nameDiv.appendChild(this.nameLine);
     this.paszamine.appendChild(this.nameDiv);
@@ -36,7 +62,40 @@ RabeteKarbari.prototype.Crate = function() {
     this.body.appendChild(this.paszamine);
 }
 RabeteKarbari.prototype.uploadImage = function() {
-    let 
+    let filereader = new FileReader();
+    filereader.addEventListener("load",()=> {
+        this.img.src = filereader.result;
+    })
+    filereader.readAsDataURL(this.file.files[0]);
+}
+RabeteKarbari.prototype.saveData = function() {
+    
+    if (this.nameInput.value !== "" && this.file.files.length > 0) {
+        let updateName = CrateId();
+        socket.emit("userSigin",this.nameInput.value,updateName);
+        let http = new XMLHttpRequest();
+        let files = new FormData();
+        files.append("image",this.file.files[0]);
+        http.open("post","./image_upload"+updateName,true);
+        http.onreadystatechange = function() {
+            if (http.readyState == 200 && http.status == 4) {
+                
+            }
+        }
+        http.send(files);
+    
+        socket.on("userSigin",(userData) => {
+            localStorage.setItem("userData",JSON.stringify(userData));
+            link.click();
+        })
+    }
+    
+    
 }
 
-rabetekarbari = new RabeteKarbari();
+if (localStorage.getItem("userData")) {
+    link.click();
+}else {
+    rabetekarbari = new RabeteKarbari();
+
+}

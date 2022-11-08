@@ -1,3 +1,26 @@
+function CrateId(users = []) {
+    let palabras = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM123456789";
+    let test = true;
+    let userId;
+    while(test == true) {
+        let id = "";
+        for (let index = 0; index < 15; index++) {
+            id += palabras.charAt(Math.floor(Math.random)*palabras.length);
+        }
+        let test_ = 0;
+        users.forEach(e => {
+            if(e.id == id) test_++;
+        })
+        if (test_ == 0) {
+            test = false;
+            userId = id;
+        }
+    }
+    return userId;
+}
+
+
+
 function BuscarCart(cartas = [],numero = 1 , tipo = 3) {
     let arreyNo;
     let no = 0;
