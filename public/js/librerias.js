@@ -1,3 +1,13 @@
+function BuscarCart(cartas = [],numero = 1 , tipo = 3) {
+    let arreyNo;
+    let no = 0;
+    cartas.forEach(e => {
+        if(e.numero == numero && e.tipo == tipo) arreyNo = no;
+        no++;
+    })
+    return arreyNo;
+}
+
 function CrearObjeto(name = "cartas", val = []) {
     let objeto = {};
     objeto[name] = val;
@@ -212,7 +222,7 @@ while(caja.cartas.length > 0) {
 
 let yo_m2 = "yo:"
 yo.cartas.forEach(e => {
-    yo_m2 += e.numero + "--";
+    yo_m2 += e.numero +"/"+e.tipo+ "--";
 })
 console.log(yo_m2);
 let mesa_m2 = "mesa: "
@@ -221,7 +231,10 @@ mesa.cartas.forEach(e => {
 })
 console.log(mesa_m2);
 
-console.log(ContarCartas(Number(prompt()), yo, mesa, misGanancias));
+let cartNumero = prompt("numero de cart:");
+let carttipo = prompt("tipo de cart:");
+
+console.log(ContarCartas(BuscarCart(yo.cartas,cartNumero,carttipo), yo, mesa, misGanancias));
 let g_m2 = "g: "
 misGanancias.cartas.forEach(e => {
     g_m2 += e.numero + "--";
