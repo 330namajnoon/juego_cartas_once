@@ -2,6 +2,18 @@ function CrateUser(id, name, image) {
     this.id = id;
     this.username = name;
     this.img = image;
+   
+}
+function CreatClient() {
+    this.users = [];
+   
+}
+CreatClient.prototype.deleteUser = function(clientid) {
+    let users_d = [];
+    this.users.forEach(e => {
+        if(e.clientId !== clientid)users_d.push(e);
+    })
+    this.users = users_d;
 }
 
 function CrateId(users = []) {
@@ -38,43 +50,47 @@ server.listen(port, () => {
     console.log(`server is up on port ${port}!`);
 })
 
+const multer = require('multer');
+const { on } = require('events');
 /////  save image
-
+const storage = multer.diskStorage({
+    destination: (req ,file,cd) => {
+        cd(null,'./public/images');
+    },
+    filename: (req,file,cd) => {
+        cd(null,file.originalname);
+    }
+})
+const upload = multer({storage: storage});
 /////  save data
 
+app.post('/upload_image',upload.single('image'),(req,res) => {
+    res.send('image uploaded');
+})
 
-let users = [];
+
+let users = new CreatClient();
 io.on("connection", (client) => {
     console.log("new web connect");
-
-    client.on("userSigin", (username,image_upload) => {
-        let id = CrateId(users);
-        let imageName;
-
-        let multer = require('multer');
-        let { on } = require('events');
-        let storage = multer.diskStorage({
-            destination: (req, file, cd) => {
-                cd(null, './public/images');
-            },
-            filename: (req, file, cd) => {
-                let pasvand = file.originalname.split(".")[1];
-                cd(null, id + "." + pasvand);
-                imageName = id + "." + pasvand;
-            }
-        })
-        
-        app.post("./image_upload", upload.single('image'), (req, res) => {
-            res.send('image uploaded');
-            let newUser = new CrateUser(id, username, imageName);
-            client.emit("userSigin", newUser);
-            users.push(newUser);
-            console.log(newUser)
-        })
-
+    /////// login & sigin
+    client.on("userSigin", (username,img) => {
+        let id = CrateId(users.users);
+        let newUser = new CrateUser(id,username,img);
+        client.emit("userSigin",newUser);
+    })
+    client.on("userLogin",(user)=> {
+        let newuser = user;
+        newuser.clientId = client.id;
+        users.users.push(newuser);
+        io.emit("usersUpdate",(users.users));
+    })
+    /////// invitar 
+    client.on("invitar",(userData,myData) => {
+        io.emit(userData.id,myData);
     })
 
     client.on("disconnect", () => {
         console.log("new web disconnect");
+        // users.deleteUser(client.id);
     })
 })

@@ -71,20 +71,23 @@ RabeteKarbari.prototype.uploadImage = function() {
 RabeteKarbari.prototype.saveData = function() {
     
     if (this.nameInput.value !== "" && this.file.files.length > 0) {
-        let updateName = CrateId();
-        socket.emit("userSigin",this.nameInput.value,updateName);
+        
         let http = new XMLHttpRequest();
-        let files = new FormData();
-        files.append("image",this.file.files[0]);
-        http.open("post","./image_upload"+updateName,true);
+        let formdata = new FormData();
+        formdata.append("image",this.file.files[0]);
+        http.open("post","/upload_image",true);
+        console.log(this.file.files[0].name)
+        let username = this.nameInput.value;
+        let imgurl = this.file.files[0].name;
         http.onreadystatechange = function() {
-            if (http.readyState == 200 && http.status == 4) {
-                
+            if (http.readyState == 4 && http.status == 200) {
+                socket.emit("userSigin",username,imgurl);
             }
         }
-        http.send(files);
-    
-        socket.on("userSigin",(userData) => {
+        http.send(formdata);
+        
+        socket.on("userSigin",(userData,client) => {
+            console.log(client)
             localStorage.setItem("userData",JSON.stringify(userData));
             link.click();
         })
