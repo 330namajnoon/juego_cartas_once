@@ -1,15 +1,22 @@
+function Cartas() {
+    this.cartas = [];
+}
+
 function CrateUser(id, name, image) {
     this.id = id;
     this.username = name;
     this.img = image;
    
 }
-function CrateRoom(userData,myData) {
+function Room(adminId,userData,myData) {
+    this.adminId = adminId;
     this.nobat = 0;
     this.roomName = userData.id+myData.id;
     this.users = [userData,myData];
+    this.caja = new Cartas();
+    this.cartasDeMesa = new Cartas();
 }
-CrateRoom.prototype.Nobat = function() {
+Room.prototype.Nobat = function() {
     switch (this.nobat) {
         case 0:
             this.nobat = 1;
@@ -117,13 +124,26 @@ io.on("connection", (client) => {
     })
     ////// crear room 
     client.on("crearRoom",(userData,myData)=> {
-        let newroom = new CrateRoom(userData,myData);
+        let user1 = userData;
+        user1.cartas = new Cartas();
+        user1.ganancias = new Cartas();
+        let user2 = myData;
+        user2.cartas = new Cartas();
+        user2.ganancias = new Cartas();
+        let newroom = new Room(user1.id,userData,myData);
         newroom.users.forEach(e => {
-            
             io.emit(`playGame${e.id}`,newroom);
         })
         users.rooms.push(newroom);
     })
+    
+    ///////  Game
+    client.on("roomLoad",(roomName)=> {
+        console.log(roomName);
+        io.emit(`roomLoad${roomName}`,roomName);
+    
+    })
+
 
     client.on("disconnect", () => {
         console.log("new web disconnect");

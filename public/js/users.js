@@ -3,7 +3,7 @@ import { CrateElement } from "./abzarha.js";
 let socket = io();
 let rabetekarbari;
 let myData;
-let link = CrateElement({name:"a",atriviuts:[{name:"href",value:"./users.html"}]});
+let link = CrateElement({name:"a",atriviuts:[{name:"href",value:"./index.html"}]});
 document.querySelector("body").appendChild(link);
 
 
@@ -27,7 +27,6 @@ function Notificacion(userData) {
     this.buttons.appendChild(this.si);
 
     this.si.addEventListener("click",()=> {
-        alert("hola");
         socket.emit("crearRoom",this.data,myData);
     })
     this.no.addEventListener("click",()=> {
@@ -99,7 +98,7 @@ RabeteKarbari.prototype.Notificacion = function(userData) {
 
 
 
-if(localStorage.getItem("userData")) {
+if(localStorage.getItem("userData") ) {
     myData = JSON.parse(localStorage.getItem("userData"));
     socket.emit("userLogin",myData);
     rabetekarbari = new RabeteKarbari();
@@ -108,7 +107,7 @@ if(localStorage.getItem("userData")) {
         rabetekarbari.Notificacion(user);
     })
     socket.on("playGame"+myData.id,(roomData)=> {
-        localStorage.setItem("roomData",JSON.stringify(roomData));
+        localStorage.setItem("roomData",JSON.stringify(roomData))
         link.href = "./game.html";
         link.click()
     })
