@@ -27,7 +27,8 @@ function Notificacion(userData) {
     this.buttons.appendChild(this.si);
 
     this.si.addEventListener("click",()=> {
-        alert("si");
+        alert("hola");
+        socket.emit("crearRoom",this.data,myData);
     })
     this.no.addEventListener("click",()=> {
         this.paszamine.remove();
@@ -106,6 +107,11 @@ if(localStorage.getItem("userData")) {
        
         rabetekarbari.Notificacion(user);
     })
+    socket.on("playGame"+myData.id,(roomData)=> {
+        localStorage.setItem("roomData",JSON.stringify(roomData));
+        link.href = "./game.html";
+        link.click()
+    })
 }else {
     link.click();
 }
@@ -114,3 +120,4 @@ socket.on("usersUpdate",(users)=> {
     rabetekarbari.crateUsers(users);
     
 })
+

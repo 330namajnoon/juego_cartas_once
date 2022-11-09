@@ -4,8 +4,25 @@ function CrateUser(id, name, image) {
     this.img = image;
    
 }
+function CrateRoom(userData,myData) {
+    this.nobat = 0;
+    this.roomName = userData.id+myData.id;
+    this.users = [userData,myData];
+}
+CrateRoom.prototype.Nobat = function() {
+    switch (this.nobat) {
+        case 0:
+            this.nobat = 1;
+            break;
+    
+        default:
+            this.nobat = 0;
+            break;
+    }
+}
 function CreatClient() {
     this.users = [];
+    this.rooms = [];
    
 }
 CreatClient.prototype.deleteUser = function(clientid) {
@@ -13,7 +30,16 @@ CreatClient.prototype.deleteUser = function(clientid) {
     this.users.forEach(e => {
         if(e.clientId !== clientid)users_d.push(e);
     })
+    let rooms_d = [];
+    this.rooms.forEach(e => {
+        let test = 0;
+        e.users.forEach(e_ => {
+            if(e_.clientId == clientid) test++;
+        })
+        if(test == 0) rooms_d.push(e);
+    })
     this.users = users_d;
+    this.rooms = rooms_d;
 }
 
 function CrateId(users = []) {
@@ -78,6 +104,7 @@ io.on("connection", (client) => {
         let newUser = new CrateUser(id,username,img);
         client.emit("userSigin",newUser);
     })
+
     client.on("userLogin",(user)=> {
         let newuser = user;
         newuser.clientId = client.id;
@@ -88,9 +115,18 @@ io.on("connection", (client) => {
     client.on("invitar",(userData,myData) => {
         io.emit(userData.id,myData);
     })
+    ////// crear room 
+    client.on("crearRoom",(userData,myData)=> {
+        let newroom = new CrateRoom(userData,myData);
+        newroom.users.forEach(e => {
+            
+            io.emit(`playGame${e.id}`,newroom);
+        })
+        users.rooms.push(newroom);
+    })
 
     client.on("disconnect", () => {
         console.log("new web disconnect");
-        // users.deleteUser(client.id);
+        users.deleteUser(client.id);
     })
 })
