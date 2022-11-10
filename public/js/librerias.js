@@ -1,3 +1,16 @@
+function Sira(roomData) {
+    switch (roomData.nobat) {
+        case 0:
+            roomData.nobat = 1;
+            break;
+    
+        default:
+            roomData.nobat = 0;
+            break;
+    }
+}
+
+
 function CrateId(users = []) {
     let palabras = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM123456789";
     let test = true;
@@ -49,8 +62,8 @@ function crearCartas() {
 }
 
 
-let caja = CrearObjeto("cartas", crearCartas());
-console.log(caja);
+// let caja = CrearObjeto("cartas", crearCartas());
+// console.log(caja);
 
 function reparterCartas(caja, cartas = [4, 4, 4]) {
     let cartasDeJuego = [];
@@ -77,23 +90,23 @@ function reparterCartas(caja, cartas = [4, 4, 4]) {
     })
     return cartasDeJuego;
 }
-let cartasDePersonas = reparterCartas(caja, [4, 4, 4]);
-console.log(cartasDePersonas);
-console.log(caja);
+// let cartasDePersonas = reparterCartas(caja, [4, 4, 4]);
+// console.log(cartasDePersonas);
+// console.log(caja);
 
 
 
-let yo = CrearObjeto("cartas", cartasDePersonas[0]);
-let misGanancias = CrearObjeto("cartas", []);
-let tu = CrearObjeto("cartas", cartasDePersonas[1]);
-let mesa = CrearObjeto("cartas", cartasDePersonas[2]);
+// let yo = CrearObjeto("cartas", cartasDePersonas[0]);
+// let misGanancias = CrearObjeto("cartas", []);
+// let tu = CrearObjeto("cartas", cartasDePersonas[1]);
+// let mesa = CrearObjeto("cartas", cartasDePersonas[2]);
 
 // yo.cartas = [{ numero: 11 }, { numero: 1 }, { numero: 6 }, { numero: 3 }];
 // mesa.cartas = [{ numero: 2 }, { numero: 1 }, { numero: 1 }, { numero: 1 }];
 
-console.log(yo)
-console.log(mesa);
-console.log(misGanancias);
+// console.log(yo)
+// console.log(mesa);
+// console.log(misGanancias);
 
 
 
@@ -239,49 +252,53 @@ function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGan
 
 }
 
-let test = false;
+// let test = false;
 
-while(caja.cartas.length > 0) {
+// while(caja.cartas.length > 0) {
 
-let yo_m2 = "yo:"
-yo.cartas.forEach(e => {
-    yo_m2 += e.numero +"/"+e.tipo+ "--";
-})
-console.log(yo_m2);
-let mesa_m2 = "mesa: "
-mesa.cartas.forEach(e => {
-    mesa_m2 += e.numero + "--";
-})
-console.log(mesa_m2);
+// let yo_m2 = "yo:"
+// yo.cartas.forEach(e => {
+//     yo_m2 += e.numero +"/"+e.tipo+ "--";
+// })
+// console.log(yo_m2);
+// let mesa_m2 = "mesa: "
+// mesa.cartas.forEach(e => {
+//     mesa_m2 += e.numero + "--";
+// })
+// console.log(mesa_m2);
 
-let cartNumero = prompt("numero de cart:");
-let carttipo = prompt("tipo de cart:");
+// let cartNumero = prompt("numero de cart:");
+// let carttipo = prompt("tipo de cart:");
 
-console.log(ContarCartas(BuscarCart(yo.cartas,cartNumero,carttipo), yo, mesa, misGanancias));
-let g_m2 = "g: "
-misGanancias.cartas.forEach(e => {
-    g_m2 += e.numero + "--";
-})
-console.log(g_m2);
-yo_m2 = "yo: "
-yo.cartas.forEach(e => {
-    yo_m2 += e.numero + "--";
-})
-console.log(yo_m2);
-mesa_m2 = "mesa: "
-mesa.cartas.forEach(e => {
-    mesa_m2 += e.numero + "--";
-})
-console.log(mesa_m2);
+// console.log(ContarCartas(BuscarCart(yo.cartas,cartNumero,carttipo), yo, mesa, misGanancias));
+// let g_m2 = "g: "
+// misGanancias.cartas.forEach(e => {
+//     g_m2 += e.numero + "--";
+// })
+// console.log(g_m2);
+// yo_m2 = "yo: "
+// yo.cartas.forEach(e => {
+//     yo_m2 += e.numero + "--";
+// })
+// console.log(yo_m2);
+// mesa_m2 = "mesa: "
+// mesa.cartas.forEach(e => {
+//     mesa_m2 += e.numero + "--";
+// })
+// console.log(mesa_m2);
 
-if (yo.cartas.length == 0) {
+// if (yo.cartas.length == 0) {
 
-    cartasDePersonas = reparterCartas(caja, [4, 4]);
-    yo = CrearObjeto("cartas", cartasDePersonas[0]);
-}
-if (caja.cartas.length <= 0 && yo.cartas.length <= 0) {
-    test = true;
-    alert("final")
-}
+//     cartasDePersonas = reparterCartas(caja, [4, 4]);
+//     yo = CrearObjeto("cartas", cartasDePersonas[0]);
+// }
+// if (caja.cartas.length <= 0 && yo.cartas.length <= 0) {
+//     test = true;
+//     alert("final")
+// }
 
-}
+// }
+
+
+
+export{crearCartas,reparterCartas,ContarCartas,BuscarCart,Sira};

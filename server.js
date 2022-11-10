@@ -15,18 +15,9 @@ function Room(adminId,userData,myData) {
     this.users = [userData,myData];
     this.caja = new Cartas();
     this.cartasDeMesa = new Cartas();
-}
-Room.prototype.Nobat = function() {
-    switch (this.nobat) {
-        case 0:
-            this.nobat = 1;
-            break;
     
-        default:
-            this.nobat = 0;
-            break;
-    }
 }
+
 function CreatClient() {
     this.users = [];
     this.rooms = [];
@@ -139,9 +130,17 @@ io.on("connection", (client) => {
     
     ///////  Game
     client.on("roomLoad",(roomName)=> {
-        console.log(roomName);
         io.emit(`roomLoad${roomName}`,roomName);
-    
+        client.on(`pakhsheCartha${roomName}`,(roomData)=> {
+            io.emit(`pakhsheCartha${roomName}`,roomData);
+        })
+    })
+    client.on(`ersaleCart`,(cartData,roomName) => {
+
+        io.emit(`ersaleCart${roomName}`,cartData);
+    })
+    client.on(`contarCaratas`,(roomData,roomName)=>{
+        io.emit(`contarCaratas${roomName}`,roomData);
     })
 
 
