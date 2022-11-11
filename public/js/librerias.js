@@ -1,3 +1,16 @@
+function emtiyaz (ganansias = [{numero:1,tipo:3}]) {
+    let emtiyaz = 0;
+    ganansias.forEach(e => {
+        if(e.numero == 2 && e.tipo == 1) emtiyaz += 2;
+        if(e.tipo == 1) emtiyaz++;
+        if(e.numero == 10 && e.tipo == 3) emtiyaz += 3;
+        if(e.numero == 11) emtiyaz++;
+        if(e.numero == 1) emtiyaz++;
+    })
+    return emtiyaz;
+}
+
+
 function Sira(roomData) {
     switch (roomData.nobat) {
         case 0:
@@ -301,4 +314,4 @@ function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGan
 
 
 
-export{crearCartas,reparterCartas,ContarCartas,BuscarCart,Sira};
+export{crearCartas,reparterCartas,ContarCartas,BuscarCart,Sira,emtiyaz};
