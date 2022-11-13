@@ -142,6 +142,9 @@ io.on("connection", (client) => {
     client.on(`contarCaratas`,(roomData,roomName)=>{
         io.emit(`contarCaratas${roomName}`,roomData);
     })
+    client.on(`gameFinish`,(roomData,roomName)=> {
+        io.emit(`gameFinish${roomName}`,roomData);
+    })
 
 
     client.on("disconnect", () => {

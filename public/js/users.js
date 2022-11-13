@@ -48,9 +48,9 @@ function User(data = { id: "", username: "", img: "" }) {
     this.paszamine_s.appendChild(this.invitar);
 
     this.invitar.addEventListener("click", () => {
-        if(this.invitar.style.backgroundColor !== "#33FF00") {
+        if(this.invitar.style.backgroundColor !== "#00A3FF84") {
             socket.emit("invitar", this.data, myData);
-            this.invitar.style.backgroundColor = "#33FF00"
+            this.invitar.style.backgroundColor = "#00A3FF84"
             setTimeout(Timer,5000);
             function Timer() {
                 this.invitar.style.backgroundColor = "#00A3FF";

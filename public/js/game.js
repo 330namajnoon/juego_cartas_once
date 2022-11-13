@@ -46,11 +46,11 @@ Cart.prototype.Crate = function () {
     this.paszamine.appendChild(this.img);
     this.paszamine.appendChild(this.numero2);
     if (this.data.tipo <= 2) {
-        this.paszamine.style.backgroundColor = "#D40000";
+        // this.paszamine.style.backgroundColor = "#D40000";
         this.numero1.style.color = "#000000";
         this.numero2.style.color = "#000000";
     } else {
-        this.paszamine.style.backgroundColor = "#000000";
+        // this.paszamine.style.backgroundColor = "#000000";
         this.numero1.style.color = "#D40000";
         this.numero2.style.color = "#D40000";
     }
@@ -264,11 +264,22 @@ if (localStorage.getItem("userData") && localStorage.getItem("roomData")) {
                 socket.emit(`contarCaratas`,roomData,roomData.roomName);
             }
         }else {
+            rabetekarbari.pakhshCartha();
+            rabetekarbari.header.sira();
+            setTimeout(timer,2000);
+            function timer() {
+                socket.emit("gameFinish",roomData,roomData.roomName);
+            }
             
             console.log(roomData.users[0].username + ":" + emtiyaz(roomData.users[0].ganancias.cartas));
             console.log(roomData.users[1].username + ":" + emtiyaz(roomData.users[1].ganancias.cartas));
         }
         
+    })
+    socket.on(`gameFinish${roomData.roomName}`,(roomdata)=> {
+        localStorage.setItem("roomData",JSON.stringify(roomdata));
+        link.href = "./puntos.html";
+        link.click();
     })
 
 } else {

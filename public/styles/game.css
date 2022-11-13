@@ -66,9 +66,9 @@ body {
 .cartPaszamine {
     width: 160px;
     height: 230px;
-    background: #D40000;
-    border: 2px solid #D40000;
-    box-shadow: .1px .1px 10px .1px #FFFFFF;
+    background: #004DA8;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0.1px 0.1px 8px 1px #FFFFFF;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -96,7 +96,7 @@ body {
     width: 84px;
     height: 122px;
     transform: rotateY(180deg);
-    box-shadow: .1px .1px 10px .1px #FFFFFF;
+    box-shadow: 0.1px 0.1px 8px 1px #FFFFFF;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -109,13 +109,14 @@ body {
     margin-right: -75px;
 
 }
+
 .Tganancias {
     margin-top: 20px;
     float: right;
     width: 84px;
     height: 122px;
     transform: rotateY(180deg);
-    box-shadow: .1px .1px 10px .1px #FFFFFF;
+    box-shadow: 0.1px 0.1px 8px 1px #FFFFFF;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -132,7 +133,7 @@ body {
 .misGanancias {
     width: 500px;
     height: 100%;
-    
+
 }
 
 .tusGanancias {
