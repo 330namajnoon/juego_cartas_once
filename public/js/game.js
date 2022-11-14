@@ -21,7 +21,8 @@ function Cart(cartData) {
 
     this.paszamine.addEventListener("click", (e) => {
         
-        if(e.composedPath()[2].id == "paszamine" && roomData.users[roomData.nobat].id == myData.id ){
+        if(e.composedPath()[2].id == "paszamine" && roomData.users[sira].id == myData.id ){
+            Sira(roomData);
             rabetekarbari.carteErsali.appendChild(this.paszamine);
             socket.emit(`ersaleCart`,this.data,roomData.roomName);
             setTimeout(timer,2000);
@@ -29,7 +30,6 @@ function Cart(cartData) {
             function timer (){
                 roomData.users.forEach(e => {
                     if(e.id == myData.id) {
-                        Sira(roomData);
                         ContarCartas(BuscarCart(e.cartas.cartas,data.numero,data.tipo),e.cartas,roomData.cartasDeMesa,e.ganancias);
                         socket.emit(`contarCaratas`,roomData,roomData.roomName);
                     }
