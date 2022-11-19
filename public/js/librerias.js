@@ -1,3 +1,17 @@
+function carthayeBarande(cartas = [],newCartas = []) {
+    let cartasB = [];
+
+    newCartas.forEach(e => {
+        let test = 0;
+        cartas.forEach(e_ => {
+            if(e_.numero !== e.numero && e_.tipo !== e.tipo)test++;
+        })
+        if(test == cartas.length) cartasB.push(e);
+    })
+
+    return cartasB;
+}
+
 function emtiyaz (ganansias = [{numero:1,tipo:3}]) {
     let emtiyaz = 0;
     ganansias.forEach(e => {
@@ -314,4 +328,4 @@ function ContarCartas(cartaJugada = 2, misCartas = {}, cartasDeMesa = {}, misGan
 
 
 
-export{crearCartas,reparterCartas,ContarCartas,BuscarCart,Sira,emtiyaz};
+export{crearCartas,reparterCartas,ContarCartas,BuscarCart,Sira,emtiyaz,carthayeBarande};

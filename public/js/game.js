@@ -1,5 +1,5 @@
 import { CrateElement } from "./abzarha.js";
-import { crearCartas, reparterCartas, ContarCartas, BuscarCart ,Sira ,emtiyaz} from "./librerias.js";
+import { crearCartas, reparterCartas, ContarCartas, BuscarCart, Sira, emtiyaz, carthayeBarande } from "./librerias.js";
 
 let socket = io();
 let rabetekarbari;
@@ -12,7 +12,7 @@ document.querySelector("body").appendChild(link);
 function Cart(cartData) {
     this.data = cartData;
     this.paszamine = CrateElement({ name: "div", class: "cartPaszamine" });
-    this.posht = CrateElement({name:"img",src:"../images/pasur.jpg",class:"cartPosht"})
+    this.posht = CrateElement({ name: "img", src: "../images/pasur.jpg", class: "cartPosht" })
     this.numero1 = CrateElement({ name: "h3", class: "cartNumero1", inerhtml: this.data.numero });
     this.img = CrateElement({ name: "img", src: `../images/${tipoDeCartas[this.data.tipo]}.png` });
     this.numero2 = CrateElement({ name: "h3", class: "cartNumero2", inerhtml: this.data.numero });
@@ -20,24 +20,24 @@ function Cart(cartData) {
     this.Crate();
 
     this.paszamine.addEventListener("click", (e) => {
-        
-        if(e.composedPath()[2].id == "paszamine" && roomData.users[sira].id == myData.id ){
+
+        if (e.composedPath()[2].id == "paszamine" && roomData.users[roomData.nobat].id == myData.id) {
             Sira(roomData);
             rabetekarbari.carteErsali.appendChild(this.paszamine);
-            socket.emit(`ersaleCart`,this.data,roomData.roomName);
-            setTimeout(timer,2000);
+            socket.emit(`ersaleCart`, this.data, roomData.roomName);
+            setTimeout(timer, 2000);
             let data = this.data;
-            function timer (){
+            function timer() {
                 roomData.users.forEach(e => {
-                    if(e.id == myData.id) {
-                        ContarCartas(BuscarCart(e.cartas.cartas,data.numero,data.tipo),e.cartas,roomData.cartasDeMesa,e.ganancias);
-                        socket.emit(`contarCaratas`,roomData,roomData.roomName);
+                    if (e.id == myData.id) {
+                        ContarCartas(BuscarCart(e.cartas.cartas, data.numero, data.tipo), e.cartas, roomData.cartasDeMesa, e.ganancias);
+                        socket.emit(`contarCaratas`, roomData, roomData.roomName);
                     }
                 })
             }
-            
+
         }
-        
+
     })
 }
 Cart.prototype.Crate = function () {
@@ -88,7 +88,7 @@ Cart.prototype.Crate = function () {
             break;
     }
 }
-Cart.prototype.animacion = function() {
+Cart.prototype.animacion = function () {
 
 }
 
@@ -151,12 +151,12 @@ function RabeteKarbari() {
     this.body = document.querySelector("body");
     // this.paszamine = CrateElement({name:"div",class:"paszamine"});
     this.header = new Heder(roomData.users);
-    this.paszamine1 = CrateElement({ name: "div", class: "paszamine" });
-    this.carteErsali = CrateElement({name:"div",class:"carteErsali"});
-    this.misGanancias = CrateElement({name:"div",class:"misGanancias"});
-    this.tusGanancias = CrateElement({name:"div",class:"tusGanancias"});
+    this.paszamine1 = CrateElement({ name: "div", class: "paszamine1" });
+    this.carteErsali = CrateElement({ name: "div", class: "carteErsali" });
+    this.misGanancias = CrateElement({ name: "div", class: "misGanancias" });
+    this.tusGanancias = CrateElement({ name: "div", class: "tusGanancias" });
     this.paszamine2 = CrateElement({ name: "div", class: "paszamine" });
-    this.paszamine3 = CrateElement({ name: "div", class: "paszamine" ,id:"paszamine"});
+    this.paszamine3 = CrateElement({ name: "div", class: "paszamine", id: "paszamine" });
 
     this.Crate();
 }
@@ -164,13 +164,14 @@ RabeteKarbari.prototype.Crate = function () {
     this.body.appendChild(this.header.paszamine);
     this.body.appendChild(this.paszamine1);
     this.paszamine1.appendChild(this.misGanancias);
-    this.paszamine1.appendChild(this.carteErsali);
+    this.body.appendChild(this.carteErsali);
     this.paszamine1.appendChild(this.tusGanancias);
     this.body.appendChild(this.paszamine2);
     this.body.appendChild(this.paszamine3);
 
 }
 RabeteKarbari.prototype.pakhshCartha = function () {
+    this.carteErsali.style.display = "none";
     this.carteErsali.innerHTML = "";
     this.misGanancias.innerHTML = "";
     this.tusGanancias.innerHTML = "";
@@ -190,7 +191,7 @@ RabeteKarbari.prototype.pakhshCartha = function () {
                 cart.paszamine.className = "Mganancias";
                 this.misGanancias.appendChild(cart.paszamine);
             })
-        }else {
+        } else {
             e.ganancias.cartas.forEach(e => {
                 let cart = new Cart(e);
                 cart.img.remove();
@@ -221,7 +222,7 @@ if (localStorage.getItem("userData") && localStorage.getItem("roomData")) {
     if (roomData.adminId == myData.id) {
         socket.emit("roomLoad", roomData.roomName);
         socket.on(`roomLoad${roomData.roomName}`, (roomName) => {
-           
+
             roomData.caja.cartas = crearCartas();
             let cartas = reparterCartas(roomData.caja, [4, 4, 4]);
             roomData.users[0].cartas.cartas = cartas[0];
@@ -231,53 +232,68 @@ if (localStorage.getItem("userData") && localStorage.getItem("roomData")) {
         })
     }
     socket.on(`pakhsheCartha${roomData.roomName}`, (roomData_) => {
+        document.querySelector("body").innerHTML = "";
         roomData = roomData_;
-        
         rabetekarbari = new RabeteKarbari();
         rabetekarbari.pakhshCartha()
-       
+
     })
-    socket.on(`ersaleCart${roomData.roomName}`,(cartData)=> {
+    socket.on(`ersaleCart${roomData.roomName}`, (cartData) => {
         rabetekarbari.carteErsali.innerHTML = "";
+        rabetekarbari.carteErsali.style.display = "flex";
         let cart = new Cart(cartData);
-        if(roomData.users[roomData.nobat].id !== myData.id) cart.paszamine.style.transform = "rotateY(180deg)";
+        cart.paszamine.style.cssText = `box-shadow: 10px 10px 250px 30px #FFFFFF;width:214px;height:315px`;
+        if (roomData.users[roomData.nobat].id !== myData.id) cart.paszamine.style.transform = "rotateY(180deg)";
         rabetekarbari.carteErsali.appendChild(cart.paszamine);
         // if(roomData.users[roomData.nobat].id !== myData.id) cart.paszamine.style.transform = "rotateY(0deg)";
-        setTimeout(timer,100);
+        setTimeout(timer, 100);
         function timer() {
             cart.paszamine.style.transform = "rotateY(0deg)";
         }
 
     })
     socket.on(`contarCaratas${roomData.roomName}`, (roomData_) => {
-        roomData = roomData_;
+        let cartasB = carthayeBarande(roomData_.cartasDeMesa.cartas, roomData.cartasDeMesa.cartas);
+       
+        if (cartasB.length > 0) {
+            rabetekarbari.carteErsali.style.display = "flex";
+            cartasB.forEach(e => {
+                let cart = new Cart(e);
+                rabetekarbari.carteErsali.appendChild(cart.paszamine);
+            })
+            setTimeout(timer,2000);
+        }else {
+            timer();
+        }
+        function timer() {
+            roomData = roomData_;
+            if (roomData.caja.cartas.length > 0 || roomData.users[0].cartas.cartas.length > 0 || roomData.users[1].cartas.cartas.length > 0) {
+                if (roomData.users[0].cartas.cartas.length !== 0 || roomData.users[1].cartas.cartas.length !== 0) {
+                    rabetekarbari.pakhshCartha();
+                    rabetekarbari.header.sira();
 
-        if(roomData.caja.cartas.length > 0 || roomData.users[0].cartas.cartas.length > 0 || roomData.users[1].cartas.cartas.length > 0) {
-            if (roomData.users[0].cartas.cartas.length !== 0 || roomData.users[1].cartas.cartas.length !== 0) {
+                } else {
+                    let cartas = reparterCartas(roomData.caja, [4, 4]);
+                    roomData.users[0].cartas.cartas = cartas[0];
+                    roomData.users[1].cartas.cartas = cartas[1];
+                    socket.emit(`contarCaratas`, roomData, roomData.roomName);
+                }
+            } else {
                 rabetekarbari.pakhshCartha();
                 rabetekarbari.header.sira();
-                
-            }else {
-                let cartas = reparterCartas(roomData.caja, [4,4]);
-                roomData.users[0].cartas.cartas = cartas[0];
-                roomData.users[1].cartas.cartas = cartas[1];
-                socket.emit(`contarCaratas`,roomData,roomData.roomName);
+                setTimeout(timer, 2000);
+                function timer() {
+                    socket.emit("gameFinish", roomData, roomData.roomName);
+                }
+
+                console.log(roomData.users[0].username + ":" + emtiyaz(roomData.users[0].ganancias.cartas));
+                console.log(roomData.users[1].username + ":" + emtiyaz(roomData.users[1].ganancias.cartas));
             }
-        }else {
-            rabetekarbari.pakhshCartha();
-            rabetekarbari.header.sira();
-            setTimeout(timer,2000);
-            function timer() {
-                socket.emit("gameFinish",roomData,roomData.roomName);
-            }
-            
-            console.log(roomData.users[0].username + ":" + emtiyaz(roomData.users[0].ganancias.cartas));
-            console.log(roomData.users[1].username + ":" + emtiyaz(roomData.users[1].ganancias.cartas));
         }
-        
+
     })
-    socket.on(`gameFinish${roomData.roomName}`,(roomdata)=> {
-        localStorage.setItem("roomData",JSON.stringify(roomdata));
+    socket.on(`gameFinish${roomData.roomName}`, (roomdata) => {
+        localStorage.setItem("roomData", JSON.stringify(roomdata));
         link.href = "./puntos.html";
         link.click();
     })
