@@ -1,12 +1,12 @@
 function carthayeBarande(cartas = [],newCartas = []) {
     let cartasB = [];
 
-    newCartas.forEach(e => {
+    cartas.forEach(e => {
         let test = 0;
-        cartas.forEach(e_ => {
-            if(e_.numero !== e.numero && e_.tipo !== e.tipo)test++;
+        newCartas.forEach(e_ => {
+            if(e_.numero == e.numero && e_.tipo == e.tipo)test++;
         })
-        if(test == cartas.length) cartasB.push(e);
+        if(test == 0) cartasB.push(e);
     })
 
     return cartasB;

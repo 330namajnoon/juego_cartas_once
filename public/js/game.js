@@ -28,10 +28,11 @@ function Cart(cartData) {
             setTimeout(timer, 2000);
             let data = this.data;
             function timer() {
-                roomData.users.forEach(e => {
+                let newRoomdata = JSON.parse(JSON.stringify(roomData));
+                newRoomdata.users.forEach(e => {
                     if (e.id == myData.id) {
-                        ContarCartas(BuscarCart(e.cartas.cartas, data.numero, data.tipo), e.cartas, roomData.cartasDeMesa, e.ganancias);
-                        socket.emit(`contarCaratas`, roomData, roomData.roomName);
+                        ContarCartas(BuscarCart(e.cartas.cartas, data.numero, data.tipo), e.cartas, newRoomdata.cartasDeMesa, e.ganancias);
+                        socket.emit(`contarCaratas`, newRoomdata, roomData.roomName);
                     }
                 })
             }
@@ -253,15 +254,15 @@ if (localStorage.getItem("userData") && localStorage.getItem("roomData")) {
 
     })
     socket.on(`contarCaratas${roomData.roomName}`, (roomData_) => {
-        let cartasB = carthayeBarande(roomData_.cartasDeMesa.cartas, roomData.cartasDeMesa.cartas);
-       
-        if (cartasB.length > 0) {
+        let cartasB = carthayeBarande(roomData.cartasDeMesa.cartas, roomData_.cartasDeMesa.cartas);
+        // let cartasB = carthayeBarande([{numero:5,tipo:4},{numero:4,tipo:3},{numero:3,tipo:3},{numero:6,tipo:1}],[{numero:5,tipo:4},{numero:4,tipo:3}]);
+        if(cartasB.length > 0) {
             rabetekarbari.carteErsali.style.display = "flex";
             cartasB.forEach(e => {
                 let cart = new Cart(e);
                 rabetekarbari.carteErsali.appendChild(cart.paszamine);
             })
-            setTimeout(timer,2000);
+            setTimeout(timer, 2000);
         }else {
             timer();
         }
