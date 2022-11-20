@@ -19,26 +19,7 @@ function Cart(cartData) {
 
     this.Crate();
 
-    this.paszamine.addEventListener("click", (e) => {
-        
-        if(e.composedPath()[2].id == "paszamine" && roomData.users[roomData.nobat].id == myData.id ){
-            rabetekarbari.carteErsali.appendChild(this.paszamine);
-            socket.emit(`ersaleCart`,this.data,roomData.roomName);
-            setTimeout(timer,2000);
-            let data = this.data;
-            function timer (){
-                roomData.users.forEach(e => {
-                    if(e.id == myData.id) {
-                        Sira(roomData);
-                        ContarCartas(BuscarCart(e.cartas.cartas,data.numero,data.tipo),e.cartas,roomData.cartasDeMesa,e.ganancias);
-                        socket.emit(`contarCaratas`,roomData,roomData.roomName);
-                    }
-                })
-            }
-            
-        }
-        
-    })
+   
 }
 Cart.prototype.Crate = function () {
     this.paszamine.appendChild(this.posht);
@@ -131,9 +112,15 @@ function RabeteKarbari() {
     this.Crate();
 }
 RabeteKarbari.prototype.Crate = function () {
-    roomData.users.forEach(e => {
-        this.puntos.push(new Puntos(e));
-    })
+    let puntos1 = emtiyaz(roomData.users[0].ganancias.cartas);
+    let puntos2 = emtiyaz(roomData.users[1].ganancias.cartas);
+    if(puntos1 > puntos2) {
+        this.puntos.push(new Puntos(roomData.users[0]));
+        this.puntos.push(new Puntos(roomData.users[1]));
+    }else {
+        this.puntos.push(new Puntos(roomData.users[1]));
+        this.puntos.push(new Puntos(roomData.users[0]));
+    }
     this.puntos.forEach(e => {
         this.body.appendChild(e.paszamine);
     })

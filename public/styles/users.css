@@ -12,6 +12,7 @@ body {
 }
 
 .paszamine {
+    margin-top: 100px;
     position: relative;
     width: 600px;
     display: flex;
@@ -37,15 +38,16 @@ body {
 .navarB {
     position: absolute;
     width: 600px;
-    height: 50px;
+    height: 100px;
     background-color: #000226;
+    margin-top: -50px;
 
 }
 
 .navarP {
     position: absolute;
     width: 600px;
-    height: 70px;
+    height: 100px;
     top: 850px;
     background-color: #000226;
 

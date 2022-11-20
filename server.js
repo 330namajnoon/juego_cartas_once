@@ -129,12 +129,14 @@ io.on("connection", (client) => {
     })
     
     ///////  Game
-    client.on("roomLoad",(roomName)=> {
-        io.emit(`roomLoad${roomName}`,roomName);
-        client.on(`pakhsheCartha${roomName}`,(roomData)=> {
-            io.emit(`pakhsheCartha${roomName}`,roomData);
-        })
+    client.on("roomLoad",(roomData)=> {
+       
+       
+            io.emit(`pakhsheCartha${roomData.roomName}`,roomData);
+      
+        
     })
+   
     client.on(`ersaleCart`,(cartData,roomName) => {
 
         io.emit(`ersaleCart${roomName}`,cartData);
@@ -150,5 +152,6 @@ io.on("connection", (client) => {
     client.on("disconnect", () => {
         console.log("new web disconnect");
         users.deleteUser(client.id);
+
     })
 })

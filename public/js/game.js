@@ -137,6 +137,7 @@ Heder.prototype.sira = function () {
         this.userName2.style.color = colors.c_2;
         this.userPaszamine2.style.borderBottom = `solid  3px  ${colors.c_2}`;
         this.userImage2.style.boxShadow = `1px 1px 30px 1px ${colors.c_2}`;
+       
     } else {
         this.userName1.style.color = colors.c_2;
         this.userPaszamine1.style.borderBottom = `solid  3px  ${colors.c_2}`;
@@ -153,11 +154,12 @@ function RabeteKarbari() {
     // this.paszamine = CrateElement({name:"div",class:"paszamine"});
     this.header = new Heder(roomData.users);
     this.paszamine1 = CrateElement({ name: "div", class: "paszamine1" });
+    this.tedadBazi = CrateElement({name:"h3",inerhtml:"6",class:"tedadBazi"});
     this.carteErsali = CrateElement({ name: "div", class: "carteErsali" });
     this.misGanancias = CrateElement({ name: "div", class: "misGanancias" });
     this.tusGanancias = CrateElement({ name: "div", class: "tusGanancias" });
-    this.paszamine2 = CrateElement({ name: "div", class: "paszamine" });
-    this.paszamine3 = CrateElement({ name: "div", class: "paszamine", id: "paszamine" });
+    this.paszamine2 = CrateElement({ name: "div", class: "paszamine2" });
+    this.paszamine3 = CrateElement({ name: "div", class: "paszamine3", id: "paszamine" });
 
     this.Crate();
 }
@@ -166,10 +168,11 @@ RabeteKarbari.prototype.Crate = function () {
     this.body.appendChild(this.paszamine1);
     this.paszamine1.appendChild(this.misGanancias);
     this.body.appendChild(this.carteErsali);
+    this.paszamine1.appendChild(this.tedadBazi);
     this.paszamine1.appendChild(this.tusGanancias);
     this.body.appendChild(this.paszamine2);
     this.body.appendChild(this.paszamine3);
-
+    
 }
 RabeteKarbari.prototype.pakhshCartha = function () {
     this.carteErsali.style.display = "none";
@@ -220,19 +223,17 @@ RabeteKarbari.prototype.pakhshCartha = function () {
 if (localStorage.getItem("userData") && localStorage.getItem("roomData")) {
     myData = JSON.parse(localStorage.getItem("userData"));
     roomData = JSON.parse(localStorage.getItem("roomData"));
-    if (roomData.adminId == myData.id) {
-        socket.emit("roomLoad", roomData.roomName);
-        socket.on(`roomLoad${roomData.roomName}`, (roomName) => {
 
-            roomData.caja.cartas = crearCartas();
-            let cartas = reparterCartas(roomData.caja, [4, 4, 4]);
-            roomData.users[0].cartas.cartas = cartas[0];
-            roomData.users[1].cartas.cartas = cartas[1];
-            roomData.cartasDeMesa.cartas = cartas[2];
-            socket.emit(`pakhsheCartha${roomData.roomName}`, roomData);
-        })
-    }
+    roomData.caja.cartas = crearCartas();
+    let cartas = reparterCartas(roomData.caja, [4, 4, 4]);
+    roomData.users[0].cartas.cartas = cartas[0];
+    roomData.users[1].cartas.cartas = cartas[1];
+    roomData.cartasDeMesa.cartas = cartas[2];
+   
+    socket.emit("roomLoad", roomData);
+
     socket.on(`pakhsheCartha${roomData.roomName}`, (roomData_) => {
+       
         document.querySelector("body").innerHTML = "";
         roomData = roomData_;
         rabetekarbari = new RabeteKarbari();
@@ -256,14 +257,14 @@ if (localStorage.getItem("userData") && localStorage.getItem("roomData")) {
     socket.on(`contarCaratas${roomData.roomName}`, (roomData_) => {
         let cartasB = carthayeBarande(roomData.cartasDeMesa.cartas, roomData_.cartasDeMesa.cartas);
         // let cartasB = carthayeBarande([{numero:5,tipo:4},{numero:4,tipo:3},{numero:3,tipo:3},{numero:6,tipo:1}],[{numero:5,tipo:4},{numero:4,tipo:3}]);
-        if(cartasB.length > 0) {
+        if (cartasB.length > 0) {
             rabetekarbari.carteErsali.style.display = "flex";
             cartasB.forEach(e => {
                 let cart = new Cart(e);
                 rabetekarbari.carteErsali.appendChild(cart.paszamine);
             })
             setTimeout(timer, 2000);
-        }else {
+        } else {
             timer();
         }
         function timer() {
@@ -272,11 +273,11 @@ if (localStorage.getItem("userData") && localStorage.getItem("roomData")) {
                 if (roomData.users[0].cartas.cartas.length !== 0 || roomData.users[1].cartas.cartas.length !== 0) {
                     rabetekarbari.pakhshCartha();
                     rabetekarbari.header.sira();
-
                 } else {
                     let cartas = reparterCartas(roomData.caja, [4, 4]);
                     roomData.users[0].cartas.cartas = cartas[0];
                     roomData.users[1].cartas.cartas = cartas[1];
+                    rabetekarbari.tedadBazi.innerHTML = Number(rabetekarbari.tedadBazi.innerHTML) - 1;
                     socket.emit(`contarCaratas`, roomData, roomData.roomName);
                 }
             } else {

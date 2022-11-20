@@ -3,8 +3,14 @@ import { CrateElement } from "./abzarha.js";
 let socket = io();
 let rabetekarbari;
 let myData;
+
 let link = CrateElement({ name: "a", atriviuts: [{ name: "href", value: "./index.html" }] });
 document.querySelector("body").appendChild(link);
+
+
+
+
+
 
 
 function Notificacion(userData) {
@@ -48,13 +54,15 @@ function User(data = { id: "", username: "", img: "" }) {
     this.paszamine_s.appendChild(this.invitar);
 
     this.invitar.addEventListener("click", () => {
-        if(this.invitar.style.backgroundColor !== "#00A3FF84") {
+       
+        if (this.invitar.style.backgroundColor !== "#00A3FF84") {
+           
             socket.emit("invitar", this.data, myData);
-            this.invitar.style.backgroundColor = "#00A3FF84"
-            setTimeout(Timer,5000);
-            function Timer() {
-                this.invitar.style.backgroundColor = "#00A3FF";
-            }
+            this.invitar.style.backgroundColor = "#00A3FF84";
+            let invitar = this.invitar;
+            setTimeout(function Timer() {
+                invitar.style.backgroundColor = "#ffffff";
+            }, 5000)
         }
 
     })
@@ -78,7 +86,7 @@ RabeteKarbari.prototype.Crate = function () {
     this.body.appendChild(this.paszamine);
 }
 RabeteKarbari.prototype.crateUsers = function (users) {
-    console.log(users);
+
     this.paszamine_s.innerHTML = "";
     users.forEach(e => {
         if (e.id !== myData.id) {
@@ -114,13 +122,12 @@ if (localStorage.getItem("userData")) {
     socket.emit("userLogin", myData);
     rabetekarbari = new RabeteKarbari();
     socket.on(myData.id, (user) => {
-
         rabetekarbari.Notificacion(user);
     })
     socket.on("playGame" + myData.id, (roomData) => {
         localStorage.setItem("roomData", JSON.stringify(roomData))
         link.href = "./game.html";
-        link.click()
+        link.click();
     })
 } else {
     link.click();
